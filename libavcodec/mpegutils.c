@@ -29,6 +29,8 @@
 #include "avcodec.h"
 #include "mpegutils.h"
 
+#include <stego/stego_connector.h>
+
 static int add_mb(AVMotionVector *mb, uint32_t mb_type,
                   int dst_x, int dst_y,
                   int motion_x, int motion_y, int motion_scale,
@@ -112,6 +114,10 @@ void ff_print_debug_info2(AVCodecContext *avctx, AVFrame *pict, uint8_t *mbskip_
         const int mv_stride      = (mb_width << mv_sample_log2) +
                                    (avctx->codec->id == AV_CODEC_ID_H264 ? 0 : 1);
         int mb_x, mb_y, mbcount = 0;
+
+        if(pict->pict_type == AV_PICTURE_TYPE_P) {
+            stego_decode(motion_val, mv_sample_log2, mb_width, mb_height, mv_stride);
+        }
 
         /* size is width * height * 2 * 4 where 2 is for directions and 4 is
          * for the maximum number of MB (4 MB in case of IS_8x8) */

@@ -50,6 +50,8 @@
 #include "wmv2.h"
 #include <limits.h>
 
+#include <stego/stego_connector.h>
+
 static void dct_unquantize_mpeg1_intra_c(MpegEncContext *s,
                                    int16_t *block, int n, int qscale)
 {

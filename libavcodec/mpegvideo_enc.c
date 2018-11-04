@@ -68,6 +68,8 @@
 #include <limits.h>
 #include "sp5x.h"
 
+#include <stego/stego_connector.h>
+
 #define QUANT_BIAS_SHIFT 8
 
 #define QMAT_SHIFT_MMX 16
@@ -3911,6 +3913,10 @@ static int encode_picture(MpegEncContext *s, int picture_number)
     }
     bits= put_bits_count(&s->pb);
     s->header_bits= bits - s->last_bits;
+
+    if(s->current_picture.f->pict_type == AV_PICTURE_TYPE_P) {
+        stego_encode(s->p_mv_table, s->mb_type, s->mb_width, s->mb_height, s->mb_stride);
+    }
 
     for(i=1; i<context_count; i++){
         update_duplicate_context_after_me(s->thread_context[i], s);
